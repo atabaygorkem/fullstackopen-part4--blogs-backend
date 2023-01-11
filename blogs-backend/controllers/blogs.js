@@ -1,16 +1,14 @@
-const blogsRouter = require('express').Router()
-const Blog = require('../models/blog')
+const blogsRouter = require("express").Router()
+const Blog = require("../models/blog")
 
 //api/blogs path
-blogsRouter.get('/', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
+blogsRouter.get("/", (request, response) => {
+  Blog.find({}).then((blogs) => {
+    response.json(blogs)
+  })
 })
 
-blogsRouter.get('/:id', async (request, response, next) => {
+blogsRouter.get("/:id", async (request, response, next) => {
   const post = await Blog.findById(request.params.id)
   if (post) {
     response.json(post)
@@ -28,18 +26,18 @@ blogsRouter.get('/:id', async (request, response, next) => {
   //   .catch(error => next(error))
 })
 
-blogsRouter.post('/', (request, response, next) => {
+blogsRouter.post("/", (request, response, next) => {
   const blog = new Blog(request.body)
 
   blog
     .save()
-    .then(result => {
+    .then((result) => {
       response.status(201).json(result)
     })
-    .catch(error => next(error))
+    .catch((error) => next(error))
 })
 
-blogsRouter.delete('/:id', async (request, response, next) => {
+blogsRouter.delete("/:id", async (request, response, next) => {
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
   // Blog.findByIdAndRemove(request.params.id)
@@ -49,14 +47,16 @@ blogsRouter.delete('/:id', async (request, response, next) => {
   //   .catch(error => next(error))
 })
 
-blogsRouter.put('/:id', async (request, response, next) => {
+blogsRouter.put("/:id", async (request, response, next) => {
   const body = request.body
 
   const post = {
-    likes: body.likes
+    likes: body.likes,
   }
 
-  const updatedPost = await Blog.findByIdAndUpdate(request.params.id, post, { new: true })
+  const updatedPost = await Blog.findByIdAndUpdate(request.params.id, post, {
+    new: true,
+  })
   response.json(updatedPost)
   // Blog.findByIdAndUpdate(request.params.id, note, { new: true })
   //   .then(updatedNote => {
